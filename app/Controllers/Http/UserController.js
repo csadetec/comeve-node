@@ -16,17 +16,13 @@ class UserController {
     }
 
     async store({ request, response }) {
-        const {username, password, email, profile } = request.body
-
-        if(!username || !password || !email || !profile){
-            return {'error': 'preencha todos os campos'}
-        }
-
-        const user = new User()
-        user.username =  username
+        const data = request.only(['username', 'password', 'email', 'profile'])
+        
         
 
-        return {user}
+        const user = await User.create(data)
+
+        return user;
     }
 
     /**
