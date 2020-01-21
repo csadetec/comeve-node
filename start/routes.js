@@ -23,3 +23,5 @@ Route.get('/users', 'UserController.index')
 
 Route.post('/register', 'AuthController.register')
 Route.post('/authenticate', 'AuthController.authenticate')
+
+Route.resource('/events', 'EventController')
