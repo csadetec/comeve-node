@@ -20,4 +20,6 @@ Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
 })
 Route.get('/users', 'UserController.index')
-Route.post('/users', 'UserController.store')
+
+Route.post('/register', 'AuthController.register')
+Route.post('/authenticate', 'AuthController.authenticate')
