@@ -17,11 +17,13 @@
 const Route = use('Route')
 
 Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
+  return { api: 'comeve' }
 })
 Route.get('/users', 'UserController.index')
-
+Route.get('/teste/:id', 'AuthController.teste')
 Route.post('/register', 'AuthController.register')
 Route.post('/authenticate', 'AuthController.authenticate')
+
+Route.resource('/places', 'PlaceController')
 
 Route.resource('/events', 'EventController')
