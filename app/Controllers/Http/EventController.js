@@ -11,13 +11,14 @@ class EventController {
 
   }
 
-  async store ({ request, response }) {
+  async store ({ request, auth }) {
     const data = request.only(['user_id', 'name', 'place', 'date', 'start', 'end'])
-
-    const event = await Event.create(data)
+   
+   
+    const event = await Event.create({user_id: auth.user.id, ...data})
 
     return event
-
+    /** */
   }
 
   async show ({ params, request, response, view }) {

@@ -16,14 +16,17 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.get('/', () => {
-  return { api: 'comeve' }
-})
-Route.get('/users', 'UserController.index')
-Route.get('/teste/:id', 'AuthController.teste')
-Route.post('/register', 'AuthController.register')
+Route.get('/', () => {return { api: 'comeve' }})
 Route.post('/authenticate', 'AuthController.authenticate')
 
-Route.resource('/places', 'PlaceController')
+Route.group(() => {
+  Route.resource('/users', 'UserController')
+  Route.resource('/places', 'PlaceController')
+  Route.resource('/events', 'EventController')
+}).middleware('auth')
 
-Route.resource('/events', 'EventController')
+/*
+Route.get('/users', 'UserController.index')
+Route.get('/teste/:id', 'AuthController.teste')
+/** */
+Route.post('/register', 'AuthController.register')
