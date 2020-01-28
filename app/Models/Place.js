@@ -4,6 +4,7 @@
 const Model = use('Model')
 
 class Place extends Model {
+    
 }
 
 module.exports = Place

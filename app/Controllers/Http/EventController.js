@@ -5,16 +5,22 @@ class EventController {
 
   async index ({ request, response, view }) {
 
-    const events = Event.all()
+    const events = await Event.query()
+      .with('user', (builder) => {
+        builder.select('id', 'username')
+      })
+      .with('place')
+      .fetch()
 
     return events
 
   }
 
   async store ({ request, auth }) {
-    const data = request.only(['user_id', 'name', 'place', 'date', 'start', 'end'])
-   
-   
+    const data = request.only(['name', 'place_id', 'date', 'start', 'end'])
+    
+    //return data
+  
     const event = await Event.create({user_id: auth.user.id, ...data})
 
     return event
