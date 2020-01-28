@@ -27,6 +27,7 @@ Route.group(() => {
 
 /*
 Route.get('/users', 'UserController.index')
+/** *
 Route.get('/teste/:id', 'AuthController.teste')
 /** */
 Route.post('/register', 'AuthController.register')
