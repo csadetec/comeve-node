@@ -16,7 +16,7 @@ module.exports = {
   | Function - Receives the current origin and should return one of the above values.
   |
   */
-  origin: ['http://localhost:3000', 'https://comeve.netlify.com'],
+  origin: ['http://localhost:3000', 'https://comeve.netlify.com', 'https://csadetec.github.io' , 'http://10.20.0.26'],
 
   /*
   |--------------------------------------------------------------------------
