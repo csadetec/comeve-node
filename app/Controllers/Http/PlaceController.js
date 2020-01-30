@@ -10,8 +10,6 @@ class PlaceController {
     return places
   }
 
-
-
   async store ({ request, response }) {
     const data = request.only(['name'])
     
