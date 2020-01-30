@@ -23,6 +23,7 @@ Route.group(() => {
   Route.resource('/users', 'UserController')
   Route.resource('/places', 'PlaceController')
   Route.resource('/events', 'EventController')
+  Route.resource('/resources', 'ResourceController')
 }).middleware('auth')
 
 /*
