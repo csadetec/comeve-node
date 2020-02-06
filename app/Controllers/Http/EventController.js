@@ -18,9 +18,7 @@ class EventController {
 
   async store ({ request, auth }) {
     const data = request.only(['name', 'place_id', 'date', 'start', 'end'])
-    
-    //return data
-  
+      
     const event = await Event.create({user_id: auth.user.id, ...data})
 
     return event
@@ -28,6 +26,9 @@ class EventController {
   }
 
   async show ({ params, request, response, view }) {
+    const event = Event.findBy('id', params.id)
+    //console.log(response)
+    return event
   }
 
   /**
