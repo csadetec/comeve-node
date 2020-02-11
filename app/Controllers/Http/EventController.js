@@ -18,6 +18,8 @@ class EventController {
 
   async store ({ request, auth }) {
     const data = request.only(['name', 'place_id', 'date', 'start', 'end'])
+    const resources = request.only(['itemsResource'])
+    console.log(resources)
       
     const event = await Event.create({user_id: auth.user.id, ...data})
 
@@ -31,27 +33,19 @@ class EventController {
     return event
   }
 
-  /**
-   * Render a form to update an existing event.
-   * GET events/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update event details.
-   * PUT or PATCH events/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async update ({ params, request, response }) {
+    const data = request.only(['name', 'place_id', 'date', 'start', 'end'])
+    const resources = request.only(['itemsResources'])
+    console.log(resources)
+    
+    const update = await Event.query()
+      .where('id', params.id)
+      .update(data)
+
+    const event = Event.findBy('id', update)
+
+    return event
+    //return {msg: 'update event'}
   }
 
   /**
