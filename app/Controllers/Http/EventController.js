@@ -1,6 +1,8 @@
 'use strict'
 
 const Event = use('App/Models/Event')
+const EventResource = use('App/Models/EventResource')
+
 class EventController {
 
   async index ({ request, response, view }) {
@@ -35,11 +37,14 @@ class EventController {
 
   async update ({ params, request, response }) {
     const data = request.only(['name', 'place_id', 'date', 'start', 'end'])
-    const resources = request.only(['itemsResources'])
-    console.log(resources)
+    const { id } = params
+    const dataResources = request.only(['itemsResources'])
+
+    //const resources = 
+
     
     const update = await Event.query()
-      .where('id', params.id)
+      .where('id', id)
       .update(data)
 
     const event = Event.findBy('id', update)
