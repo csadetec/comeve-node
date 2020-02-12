@@ -1,16 +1,22 @@
 'use strict'
 
-const Event = use('App/Models/Event')
-const Resource = use('App/Models/Resource')
+//const Event = use('App/Models/Event')
+//const Resource = use('App/Models/Resource')
+const EventResource = use('App/Models/EventResource')
 
 class EventResourceController {
   
-  async store({ params, request, response }){
-    const event = await Event.findBy('id', params.id)
+  async store(event_id, resources){
 
-    return event
-    //return {teste:'request'}
-    //return {teste:'teste'}
+    resources.map((r) => {
+      EventResource.create({event_id: event_id, resource_id: r.id})
+    })
+
+  }
+
+  teste(){
+    //console.log('teste')
+    return 'teste'
   }
 
 }
