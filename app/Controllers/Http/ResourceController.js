@@ -13,7 +13,7 @@ class ResourceController {
 
   async store ({ request, response }) {
     
-    const data = request.only(['name'])
+    const data = request.only(['name', 'sector'])
 
     const resource = Resource.create(data)
 
@@ -28,37 +28,21 @@ class ResourceController {
 
   }
 
-  /**
-   * Render a form to update an existing resource.
-   * GET resources/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update resource details.
-   * PUT or PATCH resources/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async update ({ params, request, response }) {
+    const data = request.only(['name', 'sector'])
+
+    const { id } = params
+
+    const update = await Resource.query()
+      .where('id', id)
+      .update(data)
+
+    return update  
+    //const resource 
+
   }
 
-  /**
-   * Delete a resource with id.
-   * DELETE resources/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
+
   async destroy ({ params, request, response }) {
   }
 }

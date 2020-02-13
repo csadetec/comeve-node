@@ -64,14 +64,6 @@ class EventController {
     //return {msg: 'update event'}
   }
 
-  /**
-   * Delete a event with id.
-   * DELETE events/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async destroy ({ params, request, response }) {
   }
 }
