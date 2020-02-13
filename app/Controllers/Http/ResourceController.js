@@ -20,16 +20,12 @@ class ResourceController {
     return resource
   }
 
-  /**
-   * Display a single resource.
-   * GET resources/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
+
   async show ({ params, request, response, view }) {
+    const resource = Resource.findBy('id', params.id)
+
+    return resource 
+
   }
 
   /**
