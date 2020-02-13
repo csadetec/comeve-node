@@ -22,18 +22,25 @@ class EventController {
 
   async store ({ request, auth }) {
     const data = request.only(['name', 'place_id', 'date', 'start', 'end'])
-    const resources = request.only(['itemsResource'])
-  //  console.log(resources)
-//      
+    const { itemsResources } = request.only(['itemsResources'])
+      
     const event = await Event.create({user_id: auth.user.id, ...data})
+    await er.store(event.id, itemsResources)
+    //console.log(event)
 
     return event
     /** */
   }
 
   async show ({ params, request, response, view }) {
-    const event = Event.findBy('id', params.id)
+    //const event = await  Event.query().findBy('id', params.id).with('resource').fetch()
+    
+    const event = await Event.query()
+      .where('id', params.id)
+      .with('resource')
+      .fetch()
     //console.log(response)
+    /** */
     return event
   }
 
@@ -42,25 +49,13 @@ class EventController {
     const { id } = params
     const {itemsResources} = request.only(['itemsResources'])
     //console.log( await er.store(id, itemsResources))
-    await er.store(id, itemsResources)
-    /*
-    itemsResources.map((r) => {
-      Teste.create({event_id: id, resource_id: r.id})
-    })
-    //console.log(EventResource.teste())
-    //console.log(itemsResources)
-    /*
-    itemsResources.map((r) => {
-      console.log(r.name)
-    })
-    /** */
-    //await dataResources.createMany(EventResource)
-    
-
     
     const update = await Event.query()
       .where('id', id)
       .update(data)
+
+    await er.store(id, itemsResources)
+
 
     const event = Event.findBy('id', update)
 

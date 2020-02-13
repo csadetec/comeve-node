@@ -10,6 +10,13 @@ class Event extends Model {
   user(){
     return this.belongsTo('App/Models/User')
   }
+  resource(){
+    //return this.hasMany('App/Models/Resource')
+    //return this.hasMany('App/Models/EventResource')
+    return this.belongsToMany('App/Models/Resource')
+      .pivotTable('event_resources')
+
+  }
 }
 
 module.exports = Event

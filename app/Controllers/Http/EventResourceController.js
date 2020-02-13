@@ -5,16 +5,19 @@
 const EventResource = use('App/Models/EventResource')
 
 class EventResourceController {
+
+  async store(event_id, resources) {
   
-  async store(event_id, resources){
+    await EventResource.query()
+      .where('event_id', event_id)
+      .delete()  
 
     resources.map((r) => {
-      EventResource.create({event_id: event_id, resource_id: r.id})
+      EventResource.create({ event_id: event_id, resource_id: r.id })
     })
-
   }
 
-  teste(){
+  teste() {
     //console.log('teste')
     return 'teste'
   }
