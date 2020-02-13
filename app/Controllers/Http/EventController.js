@@ -14,6 +14,7 @@ class EventController {
         builder.select('id', 'username')
       })
       .with('place')
+      .with('resource')
       .fetch()
 
     return events
