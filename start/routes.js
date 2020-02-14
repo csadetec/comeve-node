@@ -23,8 +23,8 @@ Route.group(() => {
   Route.resource('/users', 'UserController')
   Route.resource('/places', 'PlaceController')
   Route.resource('/events', 'EventController')
-  //Route.post('/events/:id/resources', 'EventResourceController.store')
   Route.resource('/resources', 'ResourceController')
+  Route.resource('/sectors', 'SectorController')
 }).middleware('auth')
 
 /*
