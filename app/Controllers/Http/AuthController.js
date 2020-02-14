@@ -22,15 +22,16 @@ class AuthController {
     const { username, password } = request.all()
 
     const token = await auth.attempt(username, password)
- //   const user = await  User.findBy('username', username)
 
-    token.username = username
+    const user = await  User.findBy('username', username)
+
+    token.name = user.name
     return token
   }
 
 
   async register({ request }) {
-    const data = request.only(['username', 'password', 'email', 'profile'])
+    const data = request.only(['username', 'name', 'password', 'email', 'sector_id'])
 
     const username = await User.findBy('username', data.username)
 

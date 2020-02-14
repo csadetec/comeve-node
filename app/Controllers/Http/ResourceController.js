@@ -6,16 +6,25 @@ class ResourceController {
 
   async index ({ request, response, view }) {
     
-    const resources = await Resource.all()
+    //const resources = await Resource.all()
+    const resources = await Resource.query()
+      .with('sector')
+      .fetch()
 
     return resources
   }
 
   async store ({ request, response }) {
     
-    const data = request.only(['name', 'sector'])
+    const data = request.only(['name', 'sector_id'])
 
-    const resource = Resource.create(data)
+    let resource = await Resource.findBy('name', data.name)
+
+    if(resource){
+      return ({message: `${data.name} já foi cadastrado`})
+    }
+
+    resource = await Resource.create(data)
 
     return resource
   }
@@ -33,12 +42,14 @@ class ResourceController {
 
     const { id } = params
 
-    const update = await Resource.query()
+    const resource_id = await Resource.query()
       .where('id', id)
       .update(data)
 
-    return update  
-    //const resource 
+    const resource = await Resource.find(resource_id)
+
+    return resource
+
 
   }
 

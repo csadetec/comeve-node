@@ -4,6 +4,10 @@
 const Model = use('Model')
 
 class Resource extends Model {
+  sector(){
+    return this.belongsTo('App/Models/Sector')
+  }
+
 }
 
 module.exports = Resource
