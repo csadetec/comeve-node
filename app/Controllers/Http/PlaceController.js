@@ -16,7 +16,7 @@ class PlaceController {
     let place =  await Place.findBy('name', data.name)
     
     if(place){
-      return response.status(401).send({message: data.name +' já foi cadastrado!'})
+      return ({message: data.name +' já foi cadastrado!'})
     }
     /** */
     place = Place.create(data)
@@ -26,39 +26,31 @@ class PlaceController {
 
 
   async show ({ params, request, response, view }) {
+    const { id } = params
+
+    const place = await Place.find(id)
+
+    return place
+
   }
 
-  /**
-   * Render a form to update an existing place.
-   * GET places/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update place details.
-   * PUT or PATCH places/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async update ({ params, request, response }) {
+    const data = request.only(['name'])
+    //console.log(data)
+    
+    const { id } = params
+    
+    const place_id = await Place.query()
+      .where('id', id)
+      .update(data)
+
+    const place = await Place.find(id)
+    //console.log('id :', id, 'place_id :',place_id)
+    return place
+    //return place_id
   }
 
-  /**
-   * Delete a place with id.
-   * DELETE places/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
+
   async destroy ({ params, request, response }) {
   }
 }

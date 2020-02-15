@@ -43,11 +43,11 @@ class SectorController {
     const { id } = params
     const data = request.only(['name'])
 
-    const sector_id = await Sector.query()
+    const sectorUpdate = await Sector.query()
       .where('id', id)
       .update(data)
 
-    const sector = await Sector.findBy('id', sector_id)
+    const sector = await Sector.find(id)
 
     return sector
   }

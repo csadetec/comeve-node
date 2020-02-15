@@ -58,7 +58,7 @@ class EventController {
     await er.store(id, itemsResources)
 
 
-    const event = Event.findBy('id', update)
+    const event = Event.find(id)
 
     return event
     //return {msg: 'update event'}

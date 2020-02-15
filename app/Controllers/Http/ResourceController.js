@@ -42,11 +42,11 @@ class ResourceController {
 
     const { id } = params
 
-    const resource_id = await Resource.query()
+    const resourceUpdate = await Resource.query()
       .where('id', id)
       .update(data)
 
-    const resource = await Resource.find(resource_id)
+    const resource = await Resource.find(id)
 
     return resource
 
