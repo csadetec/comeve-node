@@ -7,22 +7,75 @@
 const User = use('App/Models/User')
 
 class UserController {
-    async index({ request, response, view }) {
-        
-        const users = await User.all()
-        return  users
+  async index({ request, response, view }) {
 
+    //const users = await User.all()
+    const users = await User.query()
+      .with('sector')
+      .fetch()
+    //console.log(users.rows)
+    users.rows.map( r => {
+      r.password = undefined
+    })
+    //return teste
+    return users
+
+  }
+
+  async store({ request }){
+
+    const data = request.only(['username', 'password', 'name', 'email', 'sector_id'])
+
+    const username = await User.findBy('username', data.username)
+
+    if (username) {
+      return { message: 'Usuário ja cadastrado' }
     }
 
-    async show({ params, request, response, view }) {
+    const email = await User.findBy('email', data.email)
+
+    if (email) {
+      return { message: 'Email ja cadastrado' }
     }
 
-    async update({ params, request, response }) {
+    const user = await User.create(data)
+
+    return user
+  }
+
+  async show({ params, request, response, view }) {
+    const { id } = params
+
+    const user = await User.find(id)
+
+    user.password = undefined
+    return user
+  }
+
+  async update({ params, request, response }) {
+    const { id } = params
+    const data = request.only(['username', 'name', 'email', 'sector_id'])
+    let  password  = request.only(['password'])
+    
+    if(password.password !== null){
+      data.password = password.password
     }
+    console.log(password.password)
+    return data 
+    await User.query()
+      .update(data)
+      .where('id', id)
+
+    const user = await User.find(id)
+
+    return user
+    /**; */
+
+  }
 
 
-    async destroy({ params, request, response }) {
-    }
+  async destroy({ params, request, response }) {
+  }
 }
 
 module.exports = UserController
