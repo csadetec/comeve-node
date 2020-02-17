@@ -28,6 +28,10 @@ class UserController {
 
     const username = await User.findBy('username', data.username)
 
+    if(data.password === null){
+      return { message: 'O Campo senha é obrigatório '}
+    }
+
     if (username) {
       return { message: 'Usuário ja cadastrado' }
     }
