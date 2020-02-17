@@ -5,7 +5,7 @@
  * Resourceful controller for interacting with users
  */
 const User = use('App/Models/User')
-
+const Hash = use('Hash')
 class UserController {
   async index({ request, response, view }) {
 
@@ -62,15 +62,15 @@ class UserController {
     let  password  = request.only(['password'])
     
     if(password.password !== null){
-      data.password = password.password
+      data.password = await Hash.make(password.password)
     }
-    console.log(password.password)
-    return data 
+
     await User.query()
       .update(data)
       .where('id', id)
 
     const user = await User.find(id)
+    console.log(user)
 
     return user
     /**; */
