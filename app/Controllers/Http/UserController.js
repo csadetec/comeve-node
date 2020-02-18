@@ -70,7 +70,7 @@ class UserController {
       .where('id', id)
 
     const user = await User.find(id)
-    console.log(user)
+    //console.log(user)
 
     return user
     /**; */
