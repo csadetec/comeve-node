@@ -16,7 +16,7 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.get('/', () => {return { api: 'comeve 17-02' }})
+Route.get('/', () => {return { api: 'comeve 18-02' }})
 Route.post('/authenticate', 'AuthController.authenticate')
 
 Route.group(() => {
