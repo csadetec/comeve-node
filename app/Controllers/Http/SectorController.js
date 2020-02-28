@@ -43,6 +43,7 @@ class SectorController {
     const { id } = params
     const data = request.only(['name'])
 
+    return data
     const sectorUpdate = await Sector.query()
       .where('id', id)
       .update(data)
