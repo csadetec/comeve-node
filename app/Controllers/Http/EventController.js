@@ -3,6 +3,8 @@
 const Event = use('App/Models/Event')
 const EventResource = use('App/Models/EventResource')
 const EventResourceController = use('./EventResourceController')
+const Sector = use('App/Models/Sector')
+const Resource = use('App/Models/Resource')
 //const Teste = use('App/Models/EventResourceController')
 const er = new EventResourceController()
 
@@ -34,30 +36,32 @@ class EventController {
 
   async show ({ params, request, response, view }) {
     
-    //const er = await EventResource.all()
-    //return er    
+   
     const { id } = params
-    const event = await Event.find(params)
-    
+
+    const event = await Event.find(id)
     event.user = await event.user().fetch()
     event.place = await event.place().fetch()
     event.resources = await event.resources().fetch()
-
+    
     return event
+     /* 
+    teste.sector = await resources.sector().fetch()
+
     /** */
   }
 
   async update ({ params, request, response }) {
     const data = request.only(['name', 'place_id', 'date', 'start', 'end'])
     const { id } = params
-    const {itemsResources} = request.only(['itemsResources'])
+    const {resources} = request.only(['resources'])
     //console.log( await er.store(id, itemsResources))
     
     const update = await Event.query()
       .where('id', id)
       .update(data)
 
-    await er.store(id, itemsResources)
+    await er.store(id, resources)
 
 
     const event = Event.find(id)

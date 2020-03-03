@@ -25,7 +25,7 @@ class AuthController {
 
     //const user = await  User.findBy('email', email).setHidden(['password']).fetch()
     const user = await  User.findBy('email', email)
-
+    user.sector = await user.sector().fetch()
 
     token.user = user
     return token

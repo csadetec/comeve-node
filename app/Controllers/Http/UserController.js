@@ -20,9 +20,9 @@ class UserController {
 
   async store({ request }){
 
-    const data = request.only(['username', 'password', 'name', 'email', 'sector_id'])
+    const data = request.only(['password', 'name', 'email', 'sector_id'])
 
-    const username = await User.findBy('username', data.username)
+    const username = await User.findBy('email', data.email)
 
     if(data.password === null){
       return { message: 'O Campo senha é obrigatório '}

@@ -10,6 +10,10 @@ class Event extends Model {
   user(){
     return this.belongsTo('App/Models/User')
   }
+
+  sector(){
+    return this.belongsTo('App/Models/Sector')
+  }
   resources(){
     //return this.hasMany('App/Models/Resource')
     //return this.hasMany('App/Models/EventResource')
