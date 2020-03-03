@@ -7,6 +7,9 @@ const Model = use('Model')
 const Hash = use('Hash')
 
 class User extends Model {
+  static get hidden(){
+    return ['password', 'email_verified_at', 'remember_token']
+  }
   static boot () {
     super.boot()
 

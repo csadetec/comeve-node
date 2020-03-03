@@ -9,6 +9,7 @@ class ResourceController {
     //const resources = await Resource.all()
     const resources = await Resource.query()
       .with('sector')
+      .orderBy('name', 'asc')
       .fetch()
 
     return resources
@@ -31,7 +32,10 @@ class ResourceController {
 
 
   async show ({ params, request, response, view }) {
-    const resource = Resource.findBy('id', params.id)
+    
+    const resource = await Resource.findBy('id', params.id)
+    
+    resource.sector = await resource.sector().fetch()
 
     return resource 
 

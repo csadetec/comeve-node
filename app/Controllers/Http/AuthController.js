@@ -19,13 +19,15 @@ class AuthController {
 
 
   async authenticate({ request, auth }) {
-    const { username, password } = request.all()
+    const { email, password } = request.all()
 
-    const token = await auth.attempt(username, password)
+    const token = await auth.attempt(email, password)
 
-    const user = await  User.findBy('username', username)
+    //const user = await  User.findBy('email', email).setHidden(['password']).fetch()
+    const user = await  User.findBy('email', email)
 
-    token.name = user.name
+
+    token.user = user
     return token
   }
 

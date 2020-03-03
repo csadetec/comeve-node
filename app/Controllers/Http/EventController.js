@@ -1,20 +1,19 @@
 'use strict'
 
 const Event = use('App/Models/Event')
-const EventResource = use('./EventResourceController')
-//const Teste = use('App/Models/EventResource')
-const er = new EventResource()
+const EventResource = use('App/Models/EventResource')
+const EventResourceController = use('./EventResourceController')
+//const Teste = use('App/Models/EventResourceController')
+const er = new EventResourceController()
 
 class EventController {
 
   async index ({ request, response, view }) {
 
     const events = await Event.query()
-      .with('user', (builder) => {
-        builder.select('id', 'username')
-      })
+      .with('user')
       .with('place')
-      .with('resource')
+      .with('resources')
       .fetch()
 
     return events
@@ -34,15 +33,18 @@ class EventController {
   }
 
   async show ({ params, request, response, view }) {
-    //const event = await  Event.query().findBy('id', params.id).with('resource').fetch()
     
-    const event = await Event.query()
-      .where('id', params.id)
-      .with('resource')
-      .fetch()
-    //console.log(response)
-    /** */
+    //const er = await EventResource.all()
+    //return er    
+    const { id } = params
+    const event = await Event.find(params)
+    
+    event.user = await event.user().fetch()
+    event.place = await event.place().fetch()
+    event.resources = await event.resources().fetch()
+
     return event
+    /** */
   }
 
   async update ({ params, request, response }) {

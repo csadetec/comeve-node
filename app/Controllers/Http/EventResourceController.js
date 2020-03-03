@@ -17,6 +17,12 @@ class EventResourceController {
     })
   }
 
+  async getEventResource(event_id, resources){
+    //er = await EventResource.findBy({event_id:event_id, resource_id:resources})
+    er = 'testes'
+    return er
+
+  }
   teste() {
     //console.log('teste')
     return 'teste'

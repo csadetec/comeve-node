@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class EventResource extends Model {
+  static get table(){
+    return 'events_resources'
+  }
 
 }
 

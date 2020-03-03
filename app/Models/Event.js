@@ -10,11 +10,12 @@ class Event extends Model {
   user(){
     return this.belongsTo('App/Models/User')
   }
-  resource(){
+  resources(){
     //return this.hasMany('App/Models/Resource')
     //return this.hasMany('App/Models/EventResource')
     return this.belongsToMany('App/Models/Resource')
-      .pivotTable('event_resources')
+      .pivotTable('events_resources')
+      .withPivot(['accept'])
 
   }
 }

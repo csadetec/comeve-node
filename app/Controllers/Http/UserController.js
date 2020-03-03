@@ -13,11 +13,7 @@ class UserController {
     const users = await User.query()
       .with('sector')
       .fetch()
-    //console.log(users.rows)
-    users.rows.map( r => {
-      r.password = undefined
-    })
-    //return teste
+ 
     return users
 
   }
@@ -52,7 +48,8 @@ class UserController {
 
     const user = await User.find(id)
 
-    user.password = undefined
+    user.sector = await user.sector().fetch()
+
     return user
   }
 
