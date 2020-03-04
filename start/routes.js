@@ -18,7 +18,7 @@ const Route = use('Route')
 
 Route.get('/', () => {return { api: 'comeve 18-02 pivot table' }})
 Route.post('/login', 'AuthController.authenticate')
-Route.post('/testeInsert','AuthController.store')
+Route.post('/register','AuthController.register')
 //Route;
 
 Route.group(() => {

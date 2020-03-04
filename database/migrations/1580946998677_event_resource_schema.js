@@ -5,10 +5,11 @@ const Schema = use('Schema')
 
 class EventResourceSchema extends Schema {
   up () {
-    this.create('event_resources', (table) => {
+    this.create('events_resources', (table) => {
       table.increments()
       table.integer('event_id').notNullable()
       table.integer('resource_id').notNullable()
+      table.integer('accept').notNullable()
       table.timestamps()
     })
   }

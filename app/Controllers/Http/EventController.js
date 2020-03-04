@@ -3,6 +3,7 @@
 const Event = use('App/Models/Event')
 const EventResource = use('App/Models/EventResource')
 const EventResourceController = use('./EventResourceController')
+const Place = use('App/Models/Place')
 const Sector = use('App/Models/Sector')
 const Resource = use('App/Models/Resource')
 //const Teste = use('App/Models/EventResourceController')
@@ -14,7 +15,6 @@ class EventController {
 
     const events = await Event.query()
       .with('user')
-      .with('place')
       .with('resources')
       .fetch()
 
@@ -24,12 +24,16 @@ class EventController {
 
   async store ({ request, auth }) {
     const data = request.only(['name', 'place_id', 'date', 'start', 'end'])
-    const { itemsResources } = request.only(['itemsResources'])
-      
-    const event = await Event.create({user_id: auth.user.id, ...data})
-    await er.store(event.id, itemsResources)
-    //console.log(event)
+    const { resources } = request.only(['resources'])
 
+    const place = await Place.find(data.place_id)
+    if(!place){
+      return {message:'Lugar não Cadastrado'}
+    }
+
+    const event = await Event.create({ ...data, user_id: auth.user.id, place_name:place.name })
+    await er.store(event.id, resources)
+    //console.log(event)
     return event
     /** */
   }
@@ -41,9 +45,9 @@ class EventController {
 
     const event = await Event.find(id)
     event.user = await event.user().fetch()
-    event.place = await event.place().fetch()
+
     event.resources = await event.resources().fetch()
-    
+    /** */
     return event
      /* 
     teste.sector = await resources.sector().fetch()
@@ -55,19 +59,22 @@ class EventController {
     const data = request.only(['name', 'place_id', 'date', 'start', 'end'])
     const { id } = params
     const {resources} = request.only(['resources'])
-    //console.log( await er.store(id, itemsResources))
     
-    const update = await Event.query()
+    await Event.query()
       .where('id', id)
       .update(data)
+    
+    await EventResource.query()
+      .where('event_id', id)
+      .delete()
+    for(let r of resources ){
+        await EventResource.create({resource_id:r.id, event_id:id, accept:r.id})
+    }
 
-    await er.store(id, resources)
-
-
-    const event = Event.find(id)
-
+    const event = await Event.find(id)
+    event.resources = await event.resources().fetch()
     return event
-    //return {msg: 'update event'}
+    /** */
   }
 
   async destroy ({ params, request, response }) {

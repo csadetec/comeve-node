@@ -8,8 +8,9 @@ class SectorController {
 
   async index ({ request, response, view }) {
     
-    const sectors = await Sector.all()
-
+    const sectors = await Sector.query()
+      .orderBy('name', 'asc')
+      .fetch()
     return sectors
   }
 
@@ -31,7 +32,7 @@ class SectorController {
   async show ({ params, request, response, view }) {
     const { id } = params
     
-    const sector = await  Sector.findBy('id', id)
+    const sector = await  Sector.find(id)
 
     return sector
   }
@@ -40,22 +41,20 @@ class SectorController {
     const { id } = params
     const data = request.only(['name'])
 
-    let sector = await Sector.find(id)
-
-    //rename sector user
-    await User.query()
-      .where('sector', sector.name)
-      .update({ sector:data.name })
-
-    await Resource.query()
-      .where('sector', sector.name)
-      .update({ sector:data.name })
-
     await Sector.query()
       .where('id', id)
       .update(data)
 
-    sector = await Sector.find(id)
+    const sector = await Sector.find(id)
+
+    //rename sector user
+    await User.query()
+      .where('sector_id', id)
+      .update({ sector_name:data.name })
+
+    await Resource.query()
+      .where('sector_id', id)
+      .update({ sector_name:data.name })
 
     return sector
   }
@@ -63,11 +62,6 @@ class SectorController {
   async destroy ({ params, request, response }) {
   }
 
-  async findName(name){
-    const user = await Sector.findBy('name', name)
-
-    return user
-  }
 }
 
 

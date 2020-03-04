@@ -7,16 +7,11 @@ const EventResource = use('App/Models/EventResource')
 class EventResourceController {
 
   async store(event_id, resources) {
-  
-    await EventResource.query()
-      .where('event_id', event_id)
-      .delete()  
-    console.log(event_id, resources)
+
     
-    resources.map((r) => {
-      EventResource.create({ event_id: event_id, resource_id: r.id, accept: r.accept })
-    })
-    /** */
+
+
+
   }
 
   async getEventResource(event_id, resources){

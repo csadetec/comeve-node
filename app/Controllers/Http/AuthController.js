@@ -1,14 +1,19 @@
 'use strict'
 
 const User = use('App/Models/User')
+const Sector = use('App/Models/Sector')
 //const Hash = use('Hash')
 
 class AuthController {
 
-  async store({ request }) {
-    const data = request.only(['email', 'password', 'name', 'sector'])
+  async register({ request }) {
+    const data = request.only(['email', 'password', 'name', 'sector_id'])
+    const sector = await Sector.find(data.sector_id)
+    if(!sector){
+      return {message:'Setor não cadastrado'}
+    }
 
-    const user = User.create(data)
+    const user = User.create({...data, sector_name:sector.name })
     return user
 
   }
@@ -26,26 +31,6 @@ class AuthController {
     return token
   }
 
-
-  async register({ request }) {
-    const data = request.only(['username', 'name', 'password', 'email', 'sector_id'])
-
-    const username = await User.findBy('username', data.username)
-
-    if (username) {
-      return { message: 'Usuário ja cadastrado' }
-    }
-
-    const email = await User.findBy('email', data.email)
-
-    if (email) {
-      return { message: 'Email ja cadastrado' }
-    }
-
-    const user = await User.create(data)
-    return user;
-
-  }
 }
 
 module.exports = AuthController

@@ -43,9 +43,8 @@ class PlaceController {
     
     const { id } = params
     
-    let place = await Place.find(id) 
-    
-    return place
+    //let place = await Place.find(id) 
+ 
     await Place.query()
       .where('id', id)
       .update(data)
@@ -54,7 +53,7 @@ class PlaceController {
       .where('place', place.name)
       .update({name: data.name})
 
-    place = await Place.find(id)
+    const place = await Place.find(id)
     //console.log('id :', id, 'place_id :',place_id)
     return place
     //return place_id

@@ -2,9 +2,7 @@
 
 const User = use('App/Models/User')
 const Hash = use('Hash')
-const SectorController = use('./SectorController')
-
-const Sector = new SectorController() 
+const Sector = use('App/Models/Sector')
 
 class UserController {
   async index({ request, response, view }) {
@@ -18,18 +16,19 @@ class UserController {
 
   async store({ request }){
 
-    const data = request.only(['password', 'name', 'email', 'sector'])
-    const email = await User.findBy('email', data.email)
+    const data = request.only(['password', 'name', 'email', 'sector_id'])
 
+    const sector = await Sector.find(data.sector_id)
+    if(!sector){
+      return {message:'Setor não cadastrado'}
+    }
+
+    const email = await User.findBy('email', data.email)
     if (email) {
       return { message: 'Email ja cadastrado' }
     }
 
-    if(!await Sector.findName(data.sector)){
-      return { message: 'Setor não cadastrado'}
-    }
-
-    const user = await User.create(data)
+    const user = await User.create({...data, sector_name:sector.name})
 
     return user
     /** */
@@ -45,17 +44,19 @@ class UserController {
 
   async update({ params, request, response }) {
     const { id } = params
-    const data = request.only(['name', 'email', 'sector'])
+    const data = request.only(['name', 'email', 'sector_id'])
     const {password} = request.only(['password'])
     
-    if(!await Sector.findName(data.sector)){
-      return { message: 'Setor não cadastrado'}
+    const sector = await Sector.find(data.sector_id)
+    if(!sector){
+      return {message:'Setor não cadastrado'}
     }
 
     if(password !== null){
       data.password = await Hash.make(password)
     }
 
+    data.sector_name = sector.name
     await User.query()
       .update(data)
       .where('id', id)
