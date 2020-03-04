@@ -42,16 +42,14 @@ class PlaceController {
     const data = request.only(['name'])
     
     const { id } = params
-    
-    //let place = await Place.find(id) 
- 
+
     await Place.query()
       .where('id', id)
       .update(data)
 
     await Event.query()
-      .where('place', place.name)
-      .update({name: data.name})
+      .where('place_id', id)
+      .update({'place_name': data.name})
 
     const place = await Place.find(id)
     //console.log('id :', id, 'place_id :',place_id)

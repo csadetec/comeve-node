@@ -32,8 +32,11 @@ class EventController {
     }
 
     const event = await Event.create({ ...data, user_id: auth.user.id, place_name:place.name })
-    await er.store(event.id, resources)
-    //console.log(event)
+
+    for(let r of resources ){
+        await EventResource.create({resource_id:r.id, event_id:event.id, accept:r.accept})
+    }
+
     return event
     /** */
   }
@@ -68,7 +71,7 @@ class EventController {
       .where('event_id', id)
       .delete()
     for(let r of resources ){
-        await EventResource.create({resource_id:r.id, event_id:id, accept:r.id})
+        await EventResource.create({resource_id:r.id, event_id:id, accept:r.accept})
     }
 
     const event = await Event.find(id)
