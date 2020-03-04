@@ -1,11 +1,15 @@
 'use strict'
 
 const Place = use('App/Models/Place')
+//const User = use('App/Models/User')
+const Event = use('App/Models/Event')
 
 class PlaceController {
 
   async index () {
-    const places = await Place.all()
+    const places = await Place.query()
+      .orderBy('name', 'asc')
+      .fetch()
 
     return places
   }
@@ -36,15 +40,21 @@ class PlaceController {
 
   async update ({ params, request, response }) {
     const data = request.only(['name'])
-    //console.log(data)
     
     const { id } = params
     
-    const place_id = await Place.query()
+    let place = await Place.find(id) 
+    
+    return place
+    await Place.query()
       .where('id', id)
       .update(data)
 
-    const place = await Place.find(id)
+    await Event.query()
+      .where('place', place.name)
+      .update({name: data.name})
+
+    place = await Place.find(id)
     //console.log('id :', id, 'place_id :',place_id)
     return place
     //return place_id

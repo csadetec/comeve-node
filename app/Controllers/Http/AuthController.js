@@ -1,20 +1,16 @@
 'use strict'
 
 const User = use('App/Models/User')
-const Hash = use('Hash')
+//const Hash = use('Hash')
 
 class AuthController {
 
-  async teste({ params }) {
-    const { id } = params
-    let password = await Hash.make('Sic7c8sic')
+  async store({ request }) {
+    const data = request.only(['email', 'password', 'name', 'sector'])
 
-    const user = await User.query().where('id', id)
-      .update({ password: password })
-
-
-
+    const user = User.create(data)
     return user
+
   }
 
 
@@ -25,7 +21,6 @@ class AuthController {
 
     //const user = await  User.findBy('email', email).setHidden(['password']).fetch()
     const user = await  User.findBy('email', email)
-    user.sector = await user.sector().fetch()
 
     token.user = user
     return token

@@ -1,6 +1,8 @@
 'use strict'
 
 const Sector = use('App/Models/Sector')
+const User = use('App/Models/User')
+const Resource = use('App/Models/Resource')
 
 class SectorController {
 
@@ -11,10 +13,7 @@ class SectorController {
     return sectors
   }
 
-  
-
   async store ({ request, response }) {
-
     const data = request.only(['name'])
 
     let sector = await  Sector.findBy('name', data.name)
@@ -24,8 +23,6 @@ class SectorController {
     }
 
     sector = Sector.create(data)
-    //console.log(sector)
-
     return sector
 
   }
@@ -43,18 +40,35 @@ class SectorController {
     const { id } = params
     const data = request.only(['name'])
 
-    return data
-    const sectorUpdate = await Sector.query()
+    let sector = await Sector.find(id)
+
+    //rename sector user
+    await User.query()
+      .where('sector', sector.name)
+      .update({ sector:data.name })
+
+    await Resource.query()
+      .where('sector', sector.name)
+      .update({ sector:data.name })
+
+    await Sector.query()
       .where('id', id)
       .update(data)
 
-    const sector = await Sector.find(id)
+    sector = await Sector.find(id)
 
     return sector
   }
 
   async destroy ({ params, request, response }) {
   }
+
+  async findName(name){
+    const user = await Sector.findBy('name', name)
+
+    return user
+  }
 }
+
 
 module.exports = SectorController

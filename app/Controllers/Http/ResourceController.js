@@ -1,28 +1,33 @@
 'use strict'
 
 const Resource = use('App/Models/Resource')
+const Sector = use('App/Models/Sector')
 
 class ResourceController {
 
-  async index ({ request, response, view }) {
-    
+  async index({ request, response, view }) {
+
     //const resources = await Resource.all()
     const resources = await Resource.query()
-      .with('sector')
       .orderBy('name', 'asc')
       .fetch()
 
     return resources
   }
 
-  async store ({ request, response }) {
-    
-    const data = request.only(['name', 'sector_id'])
+  async store({ request, response }) {
+
+    const data = request.only(['name', 'sector'])
+    const sector = await Sector.findBy('name', data.sector)
+
+    if(!sector){
+      return {message:'Setor não cadastrado'}
+    }
 
     let resource = await Resource.findBy('name', data.name)
 
-    if(resource){
-      return ({message: `${data.name} já foi cadastrado`})
+    if (resource) {
+      return ({ message: `${data.name} já foi cadastrado` })
     }
 
     resource = await Resource.create(data)
@@ -31,22 +36,19 @@ class ResourceController {
   }
 
 
-  async show ({ params, request, response, view }) {
-    
-    const resource = await Resource.findBy('id', params.id)
-    
-    resource.sector = await resource.sector().fetch()
+  async show({ params, request, response, view }) {
 
-    return resource 
+    const resource = await Resource.findBy('id', params.id)
+
+    return resource
 
   }
 
-  async update ({ params, request, response }) {
+  async update({ params, request, response }) {
     const data = request.only(['name', 'sector'])
-
     const { id } = params
 
-    const resourceUpdate = await Resource.query()
+    await Resource.query()
       .where('id', id)
       .update(data)
 
@@ -58,7 +60,7 @@ class ResourceController {
   }
 
 
-  async destroy ({ params, request, response }) {
+  async destroy({ params, request, response }) {
   }
 }
 

@@ -8,7 +8,7 @@ const Hash = use('Hash')
 
 class User extends Model {
   static get hidden(){
-    return ['password', 'email_verified_at', 'remember_token']
+    return ['password', 'email_verified_at', 'remember_token', 'created_at', 'updated_at']
   }
   static boot () {
     super.boot()
