@@ -10,6 +10,7 @@ class EventResourceSchema extends Schema {
       table.integer('event_id').notNullable()
       table.integer('resource_id').notNullable()
       table.integer('accept').notNullable()
+      table.string('date', 10).notNullable()
       table.timestamps()
     })
   }

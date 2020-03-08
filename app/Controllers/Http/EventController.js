@@ -1,49 +1,47 @@
 'use strict'
 
 const Event = use('App/Models/Event')
-const EventResource = use('App/Models/EventResource')
+//const EventResource = use('App/Models/EventResource')
 const EventResourceController = use('./EventResourceController')
+const EventUserController = use('./EventUserController')
 const Place = use('App/Models/Place')
-const Sector = use('App/Models/Sector')
-const Resource = use('App/Models/Resource')
-//const Teste = use('App/Models/EventResourceController')
-const er = new EventResourceController()
+
+const EventResource = new EventResourceController()
+const EventUser = new EventUserController()
 
 class EventController {
 
   async index ({ request, response, view }) {
 
-    const events = await Event.query()
+    return await Event.query()
       .with('user')
       .with('resources')
+      .with('guests')
       .fetch()
-
-    return events
 
   }
 
   async store ({ request, auth }) {
-    const data = request.only(['name', 'place_id', 'date', 'start', 'end'])
-    const { resources } = request.only(['resources'])
+    const data = request.only(['name', 'place_id', 'parents', 'amount_people', 'follow_id', 'date', 'start', 'end'])
+    const { resources, guests } = request.only(['resources', 'guest'])
 
     const place = await Place.find(data.place_id)
     if(!place){
       return {message:'Lugar não Cadastrado'}
     }
-
     const event = await Event.create({ ...data, user_id: auth.user.id, place_name:place.name })
 
-    for(let r of resources ){
-        await EventResource.create({resource_id:r.id, event_id:event.id, accept:r.accept})
-    }
+    await EventResource.store(event.id, resources)
+    event.resources = await event.resources().fetch()
+    event.guests = await event.guests().fetch()
+
 
     return event
-    /** */
+
   }
 
   async show ({ params, request, response, view }) {
     
-   
     const { id } = params
 
     const event = await Event.find(id)
@@ -52,30 +50,24 @@ class EventController {
     event.resources = await event.resources().fetch()
     /** */
     return event
-     /* 
-    teste.sector = await resources.sector().fetch()
 
-    /** */
   }
 
   async update ({ params, request, response }) {
     const data = request.only(['name', 'place_id', 'date', 'start', 'end'])
     const { id } = params
-    const {resources} = request.only(['resources'])
+    const {resources, guests} = request.only(['resources', 'guests'])
     
     await Event.query()
       .where('id', id)
       .update(data)
-    
-    await EventResource.query()
-      .where('event_id', id)
-      .delete()
-    for(let r of resources ){
-        await EventResource.create({resource_id:r.id, event_id:id, accept:r.accept})
-    }
 
+    await EventResource.store(id, resources)
+    await EventUser.store(id, guests)
+  
     const event = await Event.find(id)
     event.resources = await event.resources().fetch()
+    event.guests = await event.guests().fetch()
     return event
     /** */
   }

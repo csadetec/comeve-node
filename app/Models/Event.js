@@ -13,12 +13,14 @@ class Event extends Model {
 
 
   resources(){
-    //return this.hasMany('App/Models/Resource')
-    //return this.hasMany('App/Models/EventResource')
     return this.belongsToMany('App/Models/Resource')
       .pivotTable('events_resources')
-      .withPivot(['accept'])
+      .withPivot(['accept', 'date'])
+  }
 
+  guests(){
+    return this.belongsToMany('App/Models/User')
+      .pivotTable('events_users')
   }
 }
 

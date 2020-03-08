@@ -7,34 +7,29 @@ const Event = use('App/Models/Event')
 class PlaceController {
 
   async index () {
-    const places = await Place.query()
+    return await Place.query()
       .orderBy('name', 'asc')
       .fetch()
 
-    return places
   }
 
   async store ({ request, response }) {
     const data = request.only(['name'])
     
-    let place =  await Place.findBy('name', data.name)
+    const place =  await Place.findBy('name', data.name)
     
     if(place){
       return ({message: data.name +' já foi cadastrado!'})
     }
     /** */
-    place = Place.create(data)
-
-    return place
+    return await Place.create(data)
   }
 
 
   async show ({ params, request, response, view }) {
     const { id } = params
 
-    const place = await Place.find(id)
-
-    return place
+    return await Place.find(id)
 
   }
 
@@ -44,17 +39,15 @@ class PlaceController {
     const { id } = params
 
     await Place.query()
-      .where('id', id)
+      .where({id})
       .update(data)
 
     await Event.query()
-      .where('place_id', id)
+      .where({place_id:id})
       .update({'place_name': data.name})
 
-    const place = await Place.find(id)
-    //console.log('id :', id, 'place_id :',place_id)
-    return place
-    //return place_id
+    return await Place.find(id)
+
   }
 
 
