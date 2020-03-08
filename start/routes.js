@@ -16,22 +16,16 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.get('/', () => {return { api: 'comeve 18-02 pivot table' }})
+Route.get('/', () => {return { api: 'comeve sextou' }})
 Route.post('/login', 'AuthController.authenticate')
-Route.post('/register','AuthController.register')
-//Route;
 
 Route.group(() => {
+  Route.resource('/sectors', 'SectorController')
   Route.resource('/users', 'UserController')
   Route.resource('/places', 'PlaceController')
   Route.resource('/events', 'EventController')
   Route.resource('/resources', 'ResourceController')
-  Route.resource('/sectors', 'SectorController')
+  Route.resource('/moments', 'MomentController')
+  Route.resource('/follows', 'FollowController')
+  
 }).middleware('auth')
-
-/*
-Route.get('/users', 'UserController.index')
-/** *
-Route.get('/teste/:id', 'AuthController.teste')
-/** */
-Route.post('/register', 'AuthController.register')
