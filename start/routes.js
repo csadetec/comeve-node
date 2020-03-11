@@ -21,7 +21,7 @@ Route.post('/login', 'AuthController.authenticate')
 
 Route.group(() => {
   Route.resource('/sectors', 'SectorController')
-  Route.resource('/users', 'UserController')
+  Route.resource('/users', 'UserController').apiOnly()
   Route.resource('/places', 'PlaceController')
   Route.resource('/events', 'EventController')
   Route.resource('/resources', 'ResourceController')

@@ -46,9 +46,8 @@ class EventController {
 
     const event = await Event.find(id)
     event.user = await event.user().fetch()
-
     event.resources = await event.resources().fetch()
-    /** */
+    event.guests = await event.guests().fetch()
     return event
 
   }
