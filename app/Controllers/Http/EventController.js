@@ -17,6 +17,8 @@ class EventController {
       .with('user')
       .with('resources')
       .with('guests')
+      .orderBy('date','asc')
+      .orderBy('start', 'asc')
       .fetch()
 
   }
